@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IListResponse } from '../models/list-response.model';
+import { IUser } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +17,15 @@ export class DummyapiService {
   ) { }
 
   createRegisteredUser(user: any) {
-    return this.http.post(`${this.API_URL}/create`, user, {headers: this.TOKEN});
+    return this.http.post(`${this.API_URL}/create?created=1`, user, {headers: this.TOKEN});
   }
 
   getAllRegisteredUsers(page: number): Observable<IListResponse> {
     return this.http.get<IListResponse>(`${this.API_URL}?page=${page}&limit=10`, {headers: this.TOKEN})
   }
 
-  getRegisteredUser(id: string) {
-    return this.http.get(`${this.API_URL}/${id}`, {headers: this.TOKEN})
+  getRegisteredUser(id: string): Observable<IUser> {
+    return this.http.get<IUser>(`${this.API_URL}/${id}`, {headers: this.TOKEN})
   }
 
   updateRegisteredUser(id: string, user: any) {

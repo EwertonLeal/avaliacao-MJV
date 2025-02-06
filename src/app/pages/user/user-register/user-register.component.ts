@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, map, filter, switchMap, Subject, tap, of, delay, takeUntil } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { debounceTime, distinctUntilChanged, switchMap, Subject, takeUntil } from 'rxjs';
 import { IUser } from 'src/app/models/user.model';
-import { Address } from 'src/app/models/via-cep-address.model';
 import { DummyapiService } from 'src/app/service/dummyapi.service';
 import { ViaCepService } from 'src/app/service/Via Cep/via-cep.service';
 
@@ -15,6 +14,11 @@ import { ViaCepService } from 'src/app/service/Via Cep/via-cep.service';
 export class UserRegisterComponent implements OnInit, OnDestroy {
   userForm!: FormGroup;
   prepareUser!: IUser;
+  isUpdate: boolean = false;
+  isView: boolean = false;
+  title: string = 'Cadastro';
+  userId!: string;
+
   private cepSubject = new Subject<string>();
   private destroy$ = new Subject<void>;
 
@@ -22,11 +26,30 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private viaCepService: ViaCepService,
     private dummyApi: DummyapiService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.userId = this.activatedRoute.snapshot.params['id'];
+
+    if(this.router.url.includes('view')) {
+      this.isView = true;
+      this.isUpdate = false;
+      this.title = 'Visualização';
+    }
+
+    if(this.router.url.includes('update')) {
+      this.isUpdate = true;
+      this.isView = false;
+      this.title = 'Atualização';
+    }
+
     this.buildUserForm();
+
+    if(this.userId) {
+      this.getUserById()
+    }
 
     this.cepSubject.pipe(
       debounceTime(1000),
@@ -74,6 +97,12 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
         updatedDate: today.toISOString()
       }
 
+      if(this.userId) {
+        this.prepareUser.id = this.userId;
+        this.updateUser();
+        return;
+      }
+
       this.createUser();
     }
   }
@@ -90,19 +119,20 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
 
   private buildUserForm(): void {
     this.userForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName:  ['', [Validators.required, Validators.minLength(2)]],
-      gender:    ['', [Validators.required]],
-      picture: [''],
-      email:     [{ value: '', disabled: false }, [Validators.required, Validators.email]],
-      dateOfBirth: ['', [Validators.required]], 
-      phone: ['', [Validators.required]],
-      cep:  [''],
-      street:  [''],
-      city:    [''],
-      state:   [''],
-      country: [''],
-      timezone: ['']
+      id: [''],
+      firstName: [{ value: '', disabled: this.isView }, [Validators.required, Validators.minLength(2)]],
+      lastName:  [{ value: '', disabled: this.isView }, [Validators.required, Validators.minLength(2)]],
+      gender:    [{ value: '', disabled: this.isView }, [Validators.required]],
+      picture: [{ value: '', disabled: this.isView }],
+      email:     [{ value: '', disabled: this.isView || this.isUpdate }, [Validators.required, Validators.email]],
+      dateOfBirth: [{ value: '', disabled: this.isView }, [Validators.required]], 
+      phone: [{ value: '', disabled: this.isView }, [Validators.required]],
+      cep:  [{ value: '', disabled: this.isView }],
+      street:  [{ value: '', disabled: this.isView }],
+      city:    [{ value: '', disabled: this.isView }],
+      state:   [{ value: '', disabled: this.isView }],
+      country: [{ value: '', disabled: this.isView }],
+      timezone: [{ value: '', disabled: this.isView }]
     });
   }
 
@@ -119,6 +149,46 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
         this.router.navigate(['/user/list']);
       }
     })
+  }
+
+  private getUserById(): void {
+    this.dummyApi.getRegisteredUser(this.userId).pipe(takeUntil(this.destroy$)).subscribe({
+      next: res => {
+        this.userForm.get('id')?.setValue(res.id)
+        this.userForm.get('firstName')?.setValue(res.firstName);
+        this.userForm.get('lastName')?.setValue(res.lastName);
+        this.userForm.get('gender')?.setValue(res.gender);
+        this.userForm.get('picture')?.setValue(res.picture);
+        this.userForm.get('email')?.setValue(res.email);
+        this.userForm.get('dateOfBirth')?.setValue(this.convertDate(res.dateOfBirth));
+        this.userForm.get('phone')?.setValue(res.phone);
+        this.userForm.get('street')?.setValue(res.location.street);
+        this.userForm.get('city')?.setValue(res.location.city);
+        this.userForm.get('state')?.setValue(res.location.state);
+        this.userForm.get('country')?.setValue(res.location.country);
+        this.userForm.get('timezone')?.setValue(res.location.timezone);
+        
+      }
+    })
+  }
+
+  private updateUser(): void {
+    this.dummyApi.updateRegisteredUser(this.userId, this.prepareUser).pipe(takeUntil(this.destroy$)).subscribe({
+      next: res => {
+        this.router.navigate(['/user/view/'+this.userId]);
+      }
+    });
+  }
+
+  private convertDate(date: string): string {
+    const isoDate = date;
+    const dateObj = new Date(isoDate);
+
+    const year = dateObj.getFullYear();
+    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const day = dateObj.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
 }

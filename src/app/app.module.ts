@@ -11,6 +11,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -27,7 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     NgbModule,
     HttpClientModule,
-
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,12 +1,20 @@
  
 <div class="d-flex align-items-center justify-content-between">
     <div>
-        <h1 class="text-white mb-1">Cadastro de usuários</h1>
+        <h1 class="text-white mb-1">{{title}} de usuários</h1>
     </div>
 
-    <div>
+    <div class="d-flex gap-4">
         <button class="btn btn-secondary" [routerLink]="['/user/list']">
             Voltar
+        </button>
+
+        <button  *ngIf="isView" class="btn btn-success" [routerLink]="['/user/update/'+userId]">
+            Editar
+        </button>
+
+        <button *ngIf="isUpdate" class="btn btn-success" [routerLink]="['/user/view/'+userId]">
+            Visualizar
         </button>
     </div>
 </div>
@@ -223,7 +231,7 @@
         </fieldset>
       
         <!-- BOTÃO DE SUBMIT -->
-        <div class="d-flex justify-content-end mt-3">
+        <div class="d-flex justify-content-end mt-3" *ngIf="!isView">
           <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
       
