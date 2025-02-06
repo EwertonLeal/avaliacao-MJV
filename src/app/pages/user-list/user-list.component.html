@@ -1,0 +1,46 @@
+<div class="row g-3">
+    <div class="col-lg-6 col-sm-12">
+        <div class="card">
+            <div class="d-flex gap-3 w-100">
+
+                <div class=" w-100">
+                    <h5 class="d-flex align-items-center justify-content-between">
+                        Nome do usuario
+
+                        <div class="d-flex justify-content-end gap-3">
+                            <mat-icon aria-hidden="false" fontIcon="visibility"></mat-icon>
+                            <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
+                            <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
+                        </div>
+                    </h5>
+                    <small>id: 60d0fe4f5311236168a10a00</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <ngb-pagination [collectionSize]="70" [(page)]="page" [boundaryLinks]="true">
+        <ng-template ngbPaginationPages let-page let-pages="pages">
+            <li class="ngb-custom-pages-item" *ngIf="pages.length > 0">
+                <div class="form-group d-flex flex-nowrap px-2">
+                    <label class="col-form-label mr-2 ml-1">Página</label>
+
+                    <input #i
+                     type="text"
+                     class="form-control custom-pages-input"
+                     [value]="page"
+                     (keyup.enter)="selectPage(i.value)"
+                     (blur)="selectPage(i.value)"
+                     (input)="formatInput($any($event).target)"
+                     style="width: 2.5rem"
+                    />
+                    <span class="col-form-label text-nowrap px-2">
+                        of {{pages.length}}
+                    </span>
+                </div>
+            </li>
+        </ng-template>
+    </ngb-pagination>
+</div>
