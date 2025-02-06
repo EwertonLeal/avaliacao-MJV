@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: 'user',
-    loadChildren: () => import('./pages/user-list/user-list.module').then(userList => userList.UserListModule)
+    loadChildren: () => import('./pages/user/user-list.module').then(userList => userList.UserListModule)
   }
 ];
 
