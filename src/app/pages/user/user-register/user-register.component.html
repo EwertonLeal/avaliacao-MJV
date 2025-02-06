@@ -13,7 +13,6 @@
 
 <div class="user-list container my-5">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-
         <div class="card">
             <div class="row mb-4">
                 <!-- FIRST NAME -->
@@ -63,11 +62,11 @@
                     id="gender"
                     class="form-control"
                     formControlName="gender"
+                    (change)="selectGender($event)"
                   >
                     <option value="">-- Selecione --</option>
                     <option value="male">Masculino</option>
                     <option value="female">Feminino</option>
-                    <option value="other">Outro</option>
                   </select>
                   <div *ngIf="userForm.get('gender')?.invalid && userForm.get('gender')?.touched" class="text-danger">
                     <small>Selecione o gênero.</small>
@@ -118,6 +117,8 @@
                     class="form-control"
                     formControlName="phone"
                     placeholder="(00) 00000-0000"
+                    maxlength="15"
+                    appPhoneMask
                   />
                   <div *ngIf="userForm.get('phone')?.invalid && userForm.get('phone')?.touched" class="text-danger">
                     <small *ngIf="userForm.get('phone')?.errors?.['required']">
@@ -136,7 +137,24 @@
           <legend class="w-auto px-2">Endereço</legend>
       
           <div class="row mb-4">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
+              <label for="street">CEP</label>
+              <input
+                id="cep"
+                type="text"
+                class="form-control"
+                formControlName="cep"
+                maxlength="9"
+                appCepMask
+                (input)="onInputCep($event)"
+              />
+              
+              <div *ngIf="userForm.get('cep')?.invalid && userForm.get('cep')?.touched" class="text-danger">
+                <small>O campo "CEP" é obrigatório.</small>
+              </div>
+            </div>
+
+            <div class="form-group col-md-4">
               <label for="street">Rua</label>
               <input
                 id="street"
@@ -144,11 +162,12 @@
                 class="form-control"
                 formControlName="street"
               />
-              <div *ngIf="userForm.get('location.street')?.invalid && userForm.get('location.street')?.touched" class="text-danger">
+              <div *ngIf="userForm.get('street')?.invalid && userForm.get('street')?.touched" class="text-danger">
                 <small>O campo "Rua" é obrigatório.</small>
               </div>
             </div>
-            <div class="form-group col-md-6">
+
+            <div class="form-group col-md-4">
               <label for="city">Cidade</label>
               <input
                 id="city"
@@ -156,7 +175,7 @@
                 class="form-control"
                 formControlName="city"
               />
-              <div *ngIf="userForm.get('location.city')?.invalid && userForm.get('location.city')?.touched" class="text-danger">
+              <div *ngIf="userForm.get('city')?.invalid && userForm.get('city')?.touched" class="text-danger">
                 <small>O campo "Cidade" é obrigatório.</small>
               </div>
             </div>
@@ -171,7 +190,7 @@
                 class="form-control"
                 formControlName="state"
               />
-              <div *ngIf="userForm.get('location.state')?.invalid && userForm.get('location.state')?.touched" class="text-danger">
+              <div *ngIf="userForm.get('state')?.invalid && userForm.get('state')?.touched" class="text-danger">
                 <small>O campo "Estado" é obrigatório.</small>
               </div>
             </div>
@@ -183,7 +202,7 @@
                 class="form-control"
                 formControlName="country"
               />
-              <div *ngIf="userForm.get('location.country')?.invalid && userForm.get('location.country')?.touched" class="text-danger">
+              <div *ngIf="userForm.get('country')?.invalid && userForm.get('country')?.touched" class="text-danger">
                 <small>O campo "País" é obrigatório.</small>
               </div>
             </div>
@@ -196,7 +215,7 @@
                 formControlName="timezone"
                 placeholder="+9:00"
               />
-              <div *ngIf="userForm.get('location.timezone')?.invalid && userForm.get('location.timezone')?.touched" class="text-danger">
+              <div *ngIf="userForm.get('timezone')?.invalid && userForm.get('timezone')?.touched" class="text-danger">
                 <small>O campo "Fuso Horário" é obrigatório.</small>
               </div>
             </div>

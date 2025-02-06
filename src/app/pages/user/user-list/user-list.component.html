@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="d-flex gap-3 w-100">
                     <picture>
-                        <img src="https://cdn2.thecatapi.com/images/ebv.jpg">
+                        <img [src]="user.picture">
                     </picture>
     
                     <div class=" w-100">
@@ -25,9 +25,9 @@
                             {{ user.firstName }} {{ user.lastName }}
     
                             <div class="d-flex justify-content-end gap-3">
-                                <mat-icon aria-hidden="false" fontIcon="visibility"></mat-icon>
-                                <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
-                                <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
+                                <mat-icon [routerLink]="['/user/view/'+user.id]" aria-hidden="false" fontIcon="visibility"></mat-icon>
+                                <mat-icon [routerLink]="['/user/update/'+user.id]"aria-hidden="false" fontIcon="edit"></mat-icon>
+                                <mat-icon (click)="deleteUser(user.id)" aria-hidden="false" fontIcon="delete"></mat-icon>
                             </div>
                         </h5>
                         <small>id: {{ user.id }}</small>

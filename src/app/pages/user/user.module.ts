@@ -5,15 +5,18 @@ import { UserRoutingModule } from './user.routing.module';
 import { MatIconModule } from '@angular/material/icon';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { UserRegisterComponent } from './user-register/user-register.component';
+import { CepMaskDirective } from 'src/app/directive/cep-mask.directive';
+import { PhoneMaskDirective } from 'src/app/directive/phone-mask.directive';
 
 
 
 @NgModule({
   declarations: [
     UserListComponent,
-    UserRegisterComponent
+    UserRegisterComponent,
+    CepMaskDirective,
+    PhoneMaskDirective
   ],
   imports: [
     FormsModule,
@@ -22,6 +25,7 @@ import { UserRegisterComponent } from './user-register/user-register.component';
     UserRoutingModule,
     NgbPaginationModule,
     MatIconModule
-  ]
+  ],
+  providers: []
 })
 export class UserModule { }

@@ -35,6 +35,14 @@ export class UserListComponent implements OnInit, OnDestroy {
 	formatInput(input: HTMLInputElement) {
 		input.value = input.value.replace(FILTER_PAG_REGEX, '');
 	}
+	
+	deleteUser(id?: string):void {
+		this.dummyApi.deleteRegisteredUser(id).pipe(takeUntil(this.destroy$)).subscribe({
+			next: res => {
+				this.getAllRegisteredUser();
+			}
+		});
+	}
 
 	private getAllRegisteredUser(): void {
 		let dummyApiPage = this.page - 1;
