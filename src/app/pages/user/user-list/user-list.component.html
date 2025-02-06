@@ -1,46 +1,62 @@
-<div class="row g-3">
-    <div class="col-lg-6 col-sm-12" *ngFor="let user of userList">
-        <div class="card">
-            <div class="d-flex gap-3 w-100">
-                <picture>
-                    <img src="https://cdn2.thecatapi.com/images/ebv.jpg">
-                </picture>
+<div class="d-flex align-items-center justify-content-between">
+    <div>
+        <h1 class="text-white mb-1">Lista de usuários</h1>
+        <p class="text-white m-0">Veja aqui, todos os usuários cadastrados!</p>
+    </div>
 
-                <div class=" w-100">
-                    <h5 class="d-flex align-items-center justify-content-between">
-                        {{ user.firstName }} {{ user.lastName }}
+    <div>
+        <button class="btn btn-success" [routerLink]="['/user/register']">
+            Cadastrar usuário
+        </button>
+    </div>
+</div>
 
-                        <div class="d-flex justify-content-end gap-3">
-                            <mat-icon aria-hidden="false" fontIcon="visibility"></mat-icon>
-                            <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
-                            <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
-                        </div>
-                    </h5>
-                    <small>id: {{ user.id }}</small>
+<div class="user-list container my-5">
+    <div class="row g-3">
+        <div class="col-lg-6 col-sm-12" *ngFor="let user of userList">
+            <div class="card">
+                <div class="d-flex gap-3 w-100">
+                    <picture>
+                        <img src="https://cdn2.thecatapi.com/images/ebv.jpg">
+                    </picture>
+    
+                    <div class=" w-100">
+                        <h5 class="d-flex align-items-center justify-content-between">
+                            {{ user.firstName }} {{ user.lastName }}
+    
+                            <div class="d-flex justify-content-end gap-3">
+                                <mat-icon aria-hidden="false" fontIcon="visibility"></mat-icon>
+                                <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
+                                <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
+                            </div>
+                        </h5>
+                        <small>id: {{ user.id }}</small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <div class="mt-4">
+        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [boundaryLinks]="true" (pageChange)="selectPage(page)">
+            <ng-template ngbPaginationPages let-page let-pages="pages">
+                <li class="ngb-custom-pages-item" >
+                    <div class="form-group d-flex flex-nowrap px-2">
+                        <label class="col-form-label mr-2 ml-1">Página</label>
+    
+                        <input #i
+                         type="text"
+                         class="form-control custom-pages-input"
+                         [value]="page"
+                         style="width: 2.5rem"
+                        />
+                        <span class="col-form-label text-nowrap px-2">
+                            De {{pages.length}}
+                        </span>
+                    </div>
+                </li>
+            </ng-template>
+        </ngb-pagination>
+    </div>
 </div>
 
-<div class="mt-4">
-    <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [boundaryLinks]="true" (pageChange)="selectPage(page)">
-        <ng-template ngbPaginationPages let-page let-pages="pages">
-            <li class="ngb-custom-pages-item" >
-                <div class="form-group d-flex flex-nowrap px-2">
-                    <label class="col-form-label mr-2 ml-1">Página</label>
-
-                    <input #i
-                     type="text"
-                     class="form-control custom-pages-input"
-                     [value]="page"
-                     style="width: 2.5rem"
-                    />
-                    <span class="col-form-label text-nowrap px-2">
-                        De {{pages.length}}
-                    </span>
-                </div>
-            </li>
-        </ng-template>
-    </ngb-pagination>
-</div>

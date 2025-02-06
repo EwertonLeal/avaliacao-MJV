@@ -1,1 +1,212 @@
-<p>user-register works!</p>
+ 
+<div class="d-flex align-items-center justify-content-between">
+    <div>
+        <h1 class="text-white mb-1">Cadastro de usuários</h1>
+    </div>
+
+    <div>
+        <button class="btn btn-secondary" [routerLink]="['/user/list']">
+            Voltar
+        </button>
+    </div>
+</div>
+
+<div class="user-list container my-5">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+        <div class="card">
+            <div class="row mb-4">
+                <!-- FIRST NAME -->
+                <div class="form-group col-md-6">
+                  <label for="firstName">Nome</label>
+                  <input 
+                    id="firstName" 
+                    type="text"
+                    class="form-control"
+                    formControlName="firstName"
+                  />
+                  <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="text-danger">
+                    <small *ngIf="userForm.get('firstName')?.errors?.['required']">
+                      O campo "Nome" é obrigatório.
+                    </small>
+                    <small *ngIf="userForm.get('firstName')?.errors?.['minlength']">
+                      O campo "Nome" precisa ter no mínimo 2 caracteres.
+                    </small>
+                  </div>
+                </div>
+            
+                <!-- LAST NAME -->
+                <div class="form-group col-md-6">
+                  <label for="lastName">Sobrenome</label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    class="form-control"
+                    formControlName="lastName"
+                  />
+                  <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="text-danger">
+                    <small *ngIf="userForm.get('lastName')?.errors?.['required']">
+                      O campo "Sobrenome" é obrigatório.
+                    </small>
+                    <small *ngIf="userForm.get('lastName')?.errors?.['minlength']">
+                      O campo "Sobrenome" precisa ter no mínimo 2 caracteres.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            
+              <div class="row mb-4">
+                <!-- GENDER -->
+                <div class="form-group col-md-6">
+                  <label for="gender">Gênero</label>
+                  <select
+                    id="gender"
+                    class="form-control"
+                    formControlName="gender"
+                  >
+                    <option value="">-- Selecione --</option>
+                    <option value="male">Masculino</option>
+                    <option value="female">Feminino</option>
+                    <option value="other">Outro</option>
+                  </select>
+                  <div *ngIf="userForm.get('gender')?.invalid && userForm.get('gender')?.touched" class="text-danger">
+                    <small>Selecione o gênero.</small>
+                  </div>
+                </div>
+            
+                <!-- EMAIL -->
+                <div class="form-group col-md-6">
+                  <label for="email">Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                  />
+                  <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-danger">
+                    <small *ngIf="userForm.get('email')?.errors?.['required']">
+                      O campo "Email" é obrigatório.
+                    </small>
+                    <small *ngIf="userForm.get('email')?.errors?.['email']">
+                      Formato de email inválido.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            
+              <div class="row mb-4">
+                <!-- DATA DE NASCIMENTO -->
+                <div class="form-group col-md-6">
+                  <label for="dateOfBirth">Data de Nascimento</label>
+                  <input
+                    id="dateOfBirth"
+                    type="date"
+                    class="form-control"
+                    formControlName="dateOfBirth"
+                  />
+                  <div *ngIf="userForm.get('dateOfBirth')?.invalid && userForm.get('dateOfBirth')?.touched" class="text-danger">
+                    <small>Data de nascimento é obrigatória.</small>
+                  </div>
+                </div>
+            
+                <!-- PHONE -->
+                <div class="form-group col-md-6">
+                  <label for="phone">Telefone</label>
+                  <input
+                    id="phone"
+                    type="text"
+                    class="form-control"
+                    formControlName="phone"
+                    placeholder="(00) 00000-0000"
+                  />
+                  <div *ngIf="userForm.get('phone')?.invalid && userForm.get('phone')?.touched" class="text-danger">
+                    <small *ngIf="userForm.get('phone')?.errors?.['required']">
+                      O campo "Telefone" é obrigatório.
+                    </small>
+                    <small *ngIf="userForm.get('phone')?.errors?.['pattern']">
+                      Formato inválido de telefone. Exemplo: (11) 98888-8888
+                    </small>
+                  </div>
+                </div>
+              </div>
+        </div>
+      
+        <!-- LOCATION (sub-grupo) -->
+        <fieldset class="card p-3 mt-3">
+          <legend class="w-auto px-2">Endereço</legend>
+      
+          <div class="row mb-4">
+            <div class="form-group col-md-6">
+              <label for="street">Rua</label>
+              <input
+                id="street"
+                type="text"
+                class="form-control"
+                formControlName="street"
+              />
+              <div *ngIf="userForm.get('location.street')?.invalid && userForm.get('location.street')?.touched" class="text-danger">
+                <small>O campo "Rua" é obrigatório.</small>
+              </div>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="city">Cidade</label>
+              <input
+                id="city"
+                type="text"
+                class="form-control"
+                formControlName="city"
+              />
+              <div *ngIf="userForm.get('location.city')?.invalid && userForm.get('location.city')?.touched" class="text-danger">
+                <small>O campo "Cidade" é obrigatório.</small>
+              </div>
+            </div>
+          </div>
+      
+          <div class="row mb-4">
+            <div class="form-group col-md-4">
+              <label for="state">Estado</label>
+              <input
+                id="state"
+                type="text"
+                class="form-control"
+                formControlName="state"
+              />
+              <div *ngIf="userForm.get('location.state')?.invalid && userForm.get('location.state')?.touched" class="text-danger">
+                <small>O campo "Estado" é obrigatório.</small>
+              </div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="country">País</label>
+              <input
+                id="country"
+                type="text"
+                class="form-control"
+                formControlName="country"
+              />
+              <div *ngIf="userForm.get('location.country')?.invalid && userForm.get('location.country')?.touched" class="text-danger">
+                <small>O campo "País" é obrigatório.</small>
+              </div>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="timezone">Fuso Horário</label>
+              <input
+                id="timezone"
+                type="text"
+                class="form-control"
+                formControlName="timezone"
+                placeholder="+9:00"
+              />
+              <div *ngIf="userForm.get('location.timezone')?.invalid && userForm.get('location.timezone')?.touched" class="text-danger">
+                <small>O campo "Fuso Horário" é obrigatório.</small>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      
+        <!-- BOTÃO DE SUBMIT -->
+        <div class="d-flex justify-content-end mt-3">
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      
+      </form>
+</div>
