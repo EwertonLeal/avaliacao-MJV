@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { IUser } from 'src/app/models/user.model';
 import { DummyapiService } from 'src/app/service/dummyapi.service';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
@@ -7,10 +8,12 @@ const FILTER_PAG_REGEX = /[^0-9]/g;
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss']
+  styleUrls: ['./user-list.component.scss'],
 })
 export class UserListComponent implements OnInit, OnDestroy {
-  	public page = 0;
+	public userList!: IUser[];
+  	public page = 1;
+	public collectionSize = 0;
 	private destroy$ = new Subject<void>;
 
 	constructor( private dummyApi: DummyapiService ) {	}
@@ -24,8 +27,9 @@ export class UserListComponent implements OnInit, OnDestroy {
 		this.destroy$.complete();
 	}
 
-	selectPage(page: string) {
-		this.page = parseInt(page, 10) || 1;
+	selectPage(page: any) {
+		this.page = Number(page);
+		this.getAllRegisteredUser();
 	}
 
 	formatInput(input: HTMLInputElement) {
@@ -33,10 +37,12 @@ export class UserListComponent implements OnInit, OnDestroy {
 	}
 
 	private getAllRegisteredUser(): void {
-		this.dummyApi.getAllRegisteredUsers(this.page).pipe(takeUntil(this.destroy$)).subscribe({
+		let dummyApiPage = this.page - 1;
+
+		this.dummyApi.getAllRegisteredUsers(dummyApiPage).pipe(takeUntil(this.destroy$)).subscribe({
 			next: res => {
-				console.log(res);
-				
+				this.userList = res?.data;
+				this.collectionSize = res?.total;
 			},
 			error: error => {
 				console.log(error);

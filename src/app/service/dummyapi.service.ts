@@ -1,5 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { IListResponse } from '../models/list-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,20 +19,20 @@ export class DummyapiService {
     return this.http.post(`${this.API_URL}/create`, user, {headers: this.TOKEN});
   }
 
-  getAllRegisteredUsers(page: number) {
-    return this.http.get(`${this.API_URL}?created=1&page=${page}&limit=10`, {headers: this.TOKEN})
+  getAllRegisteredUsers(page: number): Observable<IListResponse> {
+    return this.http.get<IListResponse>(`${this.API_URL}?page=${page}&limit=10`, {headers: this.TOKEN})
   }
 
   getRegisteredUser(id: string) {
-    return this.http.get(`${this.API_URL}/${id}?created=1`, {headers: this.TOKEN})
+    return this.http.get(`${this.API_URL}/${id}`, {headers: this.TOKEN})
   }
 
   updateRegisteredUser(id: string, user: any) {
-    return this.http.put(`${this.API_URL}/${id}?created=1`, user, {headers: this.TOKEN})
+    return this.http.put(`${this.API_URL}/${id}`, user, {headers: this.TOKEN})
   }
 
   deleteRegisteredUser(id: string) {
-    return this.http.delete(`${this.API_URL}/${id}?created=1`, {headers: this.TOKEN})
+    return this.http.delete(`${this.API_URL}/${id}`, {headers: this.TOKEN})
   }
 
 }
