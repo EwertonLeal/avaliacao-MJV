@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { TYPE } from 'src/app/models/type.enum';
 import { IUser } from 'src/app/models/user.model';
 import { DummyapiService } from 'src/app/service/dummyapi.service';
+import Swal from 'sweetalert2';
 
 const FILTER_PAG_REGEX = /[^0-9]/g;
 
@@ -39,6 +41,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 	deleteUser(id?: string):void {
 		this.dummyApi.deleteRegisteredUser(id).pipe(takeUntil(this.destroy$)).subscribe({
 			next: res => {
+				this.toast(TYPE.SUCCESS, 'Removido com sucesso!')
 				this.getAllRegisteredUser();
 			}
 		});
@@ -56,6 +59,17 @@ export class UserListComponent implements OnInit, OnDestroy {
 				console.log(error);
 				
 			}
+		})
+	}
+
+	private toast(type: any, msg: string) {
+		Swal.fire({
+			toast: true,
+			position: 'top',
+			showConfirmButton: false,
+			icon: type,
+			timer: 3000,
+			title: msg
 		})
 	}
 }

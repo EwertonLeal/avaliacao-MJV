@@ -2,9 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, switchMap, Subject, takeUntil } from 'rxjs';
+import { TYPE } from 'src/app/models/type.enum';
 import { IUser } from 'src/app/models/user.model';
 import { DummyapiService } from 'src/app/service/dummyapi.service';
 import { ViaCepService } from 'src/app/service/Via Cep/via-cep.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-register',
@@ -27,7 +29,7 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     private viaCepService: ViaCepService,
     private dummyApi: DummyapiService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -145,6 +147,7 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
   private createUser(): void {
     this.dummyApi.createRegisteredUser(this.prepareUser).pipe(takeUntil(this.destroy$)).subscribe({
       next: res => {
+        this.toast(TYPE.SUCCESS, 'Cadastrado com sucesso!')
         this.userForm.reset();
         this.router.navigate(['/user/list']);
       }
@@ -175,6 +178,7 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
   private updateUser(): void {
     this.dummyApi.updateRegisteredUser(this.userId, this.prepareUser).pipe(takeUntil(this.destroy$)).subscribe({
       next: res => {
+        this.toast(TYPE.SUCCESS, 'Atualizado com sucesso!')
         this.router.navigate(['/user/view/'+this.userId]);
       }
     });
@@ -189,6 +193,17 @@ export class UserRegisterComponent implements OnInit, OnDestroy {
     const day = dateObj.getDate().toString().padStart(2, '0');
 
     return `${year}-${month}-${day}`;
+  }
+
+  private toast(type: any, msg: string) {
+    Swal.fire({
+      toast: true,
+      position: 'top',
+      showConfirmButton: false,
+      icon: type,
+      timer: 3000,
+      title: msg
+    })
   }
 
 }
