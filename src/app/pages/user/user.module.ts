@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserListComponent } from './user-list/user-list.component';
-import { UserListRoutingModule } from './user-list.routing.module';
+import { UserRoutingModule } from './user.routing.module';
 import { MatIconModule } from '@angular/material/icon';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -13,9 +13,9 @@ import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
   ],
   imports: [
     CommonModule,
-    UserListRoutingModule,
+    UserRoutingModule,
     NgbPaginationModule,
     MatIconModule
   ]
 })
-export class UserListModule { }
+export class UserModule { }
